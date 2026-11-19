@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="-10 -10 420 300" width="420" height="300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="kbFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff59d"/><stop offset=".55" stop-color="#ffca28"/><stop offset="1" stop-color="#ff8f00"/></linearGradient>
+    </defs>
+    <polygon points="200,16 225,56 274,19 270,69 334,49 308,91 360,95 330,122 373,140 329,157 361,185 304,187 331,229 276,218 267,250 225,225 200,271 173,233 127,260 127,214 56,238 96,187 15,192 74,157 24,140 76,123 32,93 86,88 74,55 126,64 126,19 175,53" fill="#ff5722" stroke="#3b1a00" stroke-width="6" stroke-linejoin="round"/>
+    <polygon points="200,37 220,73 255,53 259,82 313,66 290,100 338,102 309,126 353,140 305,154 350,181 293,181 304,209 262,201 259,235 222,214 200,246 179,209 136,242 142,197 92,211 106,182 66,177 92,154 58,140 90,126 51,99 108,99 84,63 140,81 139,43 178,68" fill="#ffeb3b" stroke="#ff9800" stroke-width="3" stroke-linejoin="round"/>
+    <g transform="rotate(-6 200 140)">
+      <text x="200" y="168" text-anchor="middle" font-family="Impact,'Arial Black','Franklin Gothic Heavy',sans-serif" font-size="88" font-weight="900"
+            textLength="300" lengthAdjust="spacingAndGlyphs" fill="#3b1a00" transform="translate(6 7)">KABUM!</text>
+      <text x="200" y="168" text-anchor="middle" font-family="Impact,'Arial Black','Franklin Gothic Heavy',sans-serif" font-size="88" font-weight="900"
+            textLength="300" lengthAdjust="spacingAndGlyphs" fill="url(#kbFill)" stroke="#3b1a00" stroke-width="9" stroke-linejoin="round" paint-order="stroke">KABUM!</text>
+    </g>
+    <text x="58" y="250" font-size="54" text-anchor="middle">💩</text>
+    <text x="342" y="250" font-size="54" text-anchor="middle">💩</text>
+  </svg>
