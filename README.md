@@ -3,6 +3,8 @@
 Cronômetro em forma de boneco-bomba: um fósforo acende o pavio na boca, a faísca desce pelo
 intestino até a bunda e, quando o tempo acaba... **KABUM!** — explosão de cocô.
 
+▶ **Jogar:** https://guilhermemelgarejo.github.io/cocometro/
+
 - Escolha o tempo com − / +, digitando ou pelos atalhos (10s, 30s, 1min)
 - Abrir já com um tempo: `?t=90` (segundos)
 - Atalhos de teclado: **Espaço** acende/pausa · **R** zera
