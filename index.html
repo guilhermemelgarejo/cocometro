@@ -1,11 +1,3 @@
-<?php
-// Tempo inicial via URL: index.php?t=90 (segundos). Padrão: 10s
-$total = isset($_GET['t']) ? (int)$_GET['t'] : 10;
-if ($total < 1) $total = 10;
-if ($total > 359999) $total = 359999;
-$min = intdiv($total, 60);
-$sec = $total % 60;
-?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -132,12 +124,12 @@ $sec = $total % 60;
 <div class="panel">
   <div class="timeRow">
     <div class="unit">
-      <div class="unitBox"><button class="step" data-d="-60" aria-label="menos 1 minuto">−</button><input type="number" id="inMin" min="0" max="5999" value="<?= $min ?>" inputmode="numeric" aria-label="minutos"><button class="step" data-d="60" aria-label="mais 1 minuto">+</button></div>
+      <div class="unitBox"><button class="step" data-d="-60" aria-label="menos 1 minuto">−</button><input type="number" id="inMin" min="0" max="5999" value="0" inputmode="numeric" aria-label="minutos"><button class="step" data-d="60" aria-label="mais 1 minuto">+</button></div>
       <small>min</small>
     </div>
     <div class="colon">:</div>
     <div class="unit">
-      <div class="unitBox"><button class="step" data-d="-1" aria-label="menos 1 segundo">−</button><input type="number" id="inSec" min="0" max="59" value="<?= $sec ?>" inputmode="numeric" aria-label="segundos"><button class="step" data-d="1" aria-label="mais 1 segundo">+</button></div>
+      <div class="unitBox"><button class="step" data-d="-1" aria-label="menos 1 segundo">−</button><input type="number" id="inSec" min="0" max="59" value="10" inputmode="numeric" aria-label="segundos"><button class="step" data-d="1" aria-label="mais 1 segundo">+</button></div>
       <small>seg</small>
     </div>
   </div>
@@ -578,6 +570,9 @@ function loop(){
   updParts(); drawBalls();
   requestAnimationFrame(loop);
 }
+// tempo inicial pela URL: ?t=90 (segundos). Padrão: 10s
+(()=>{ let t=parseInt(new URLSearchParams(location.search).get('t'));
+  if(!(t>=1)) t=10; t=Math.min(t,5999*60+59); inMin.value=Math.floor(t/60); inSec.value=t%60; })();
 reset(); loop();
 
 /* ---------- PWA ---------- */
