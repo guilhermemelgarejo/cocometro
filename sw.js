@@ -1,5 +1,5 @@
 // Service worker: funciona offline depois da primeira visita
-const CACHE = 'cocometro-v10';
+const CACHE = 'cocometro-v11';
 const ASSETS = ['./', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './kabum.svg'];
 
 self.addEventListener('install', e => {

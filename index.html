@@ -342,14 +342,14 @@ function startScream(){ const a=getAC(); if(!a||muted||scream) return; const t=a
 function stopScream(){ if(!scream) return; const s=scream; scream=null; if(!ac) return; const t=ac.currentTime;
   s.out.gain.cancelScheduledValues(t); s.out.gain.setTargetAtTime(0,t,.04); try{ s.o.stop(t+.3); s.vib.stop(t+.3); }catch(e){} }
 // pum durante a contagem: cada um sai diferente (duração, tom, "tremido")
-function smallFart(){ const a=getAC(); if(!a||muted) return; const t=a.currentTime;
-  const dur=.25+Math.random()*.7, f0=70+Math.random()*80;
+function smallFart(opt={}){ const a=getAC(); if(!a||muted) return; const t=a.currentTime;
+  const dur=opt.dur||(.25+Math.random()*.7), f0=opt.f0||(70+Math.random()*80), vol=opt.vol||1;
   const o=a.createOscillator(); o.type='sawtooth';
   o.frequency.setValueAtTime(f0*(1+Math.random()*.4),t); o.frequency.exponentialRampToValueAtTime(f0*(.55+Math.random()*.3),t+dur);
   const lfo=a.createOscillator(); lfo.frequency.setValueAtTime(18+Math.random()*22,t); lfo.frequency.linearRampToValueAtTime(10+Math.random()*10,t+dur);
   const lg=a.createGain(); lg.gain.value=.18;
-  const g=a.createGain(); g.gain.setValueAtTime(.0001,t); g.gain.linearRampToValueAtTime(.32,t+.03);
-  g.gain.setValueAtTime(.3,t+dur*.7); g.gain.exponentialRampToValueAtTime(.001,t+dur);
+  const g=a.createGain(); g.gain.setValueAtTime(.0001,t); g.gain.linearRampToValueAtTime(.32*vol,t+.03);
+  g.gain.setValueAtTime(.3*vol,t+dur*.7); g.gain.exponentialRampToValueAtTime(.001,t+dur);
   const lp=a.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=380+Math.random()*350; lp.Q.value=4;
   lfo.connect(lg).connect(g.gain); o.connect(lp).connect(g).connect(a.destination);
   // um pouquinho de "ar"
@@ -360,10 +360,10 @@ function smallFart(){ const a=getAC(); if(!a||muted) return; const t=a.currentTi
 
 /* nuvenzinhas de pum saindo da bunda + onomatopeia */
 const puffs=[], FART_WORDS=['prrt!','pfff','brrrap!','prrrr','fuuu','pot!'];
-function puff(){
+function puff(big){
   const box=$('#puffs');
-  for(let i=0;i<7;i++){ const c=document.createElementNS(NS,'circle'); c.setAttribute('fill',Math.random()<.5?'#9ccc65':'#c5e1a5'); box.appendChild(c);
-    puffs.push({el:c,x:200+(Math.random()-.5)*10,y:462,vx:(Math.random()-.5)*2.2,vy:.4+Math.random()*1.2,r:3+Math.random()*3,gr:.35+Math.random()*.3,life:1,dl:.012+Math.random()*.01}); }
+  for(let i=0;i<(big?22:7);i++){ const c=document.createElementNS(NS,'circle'); c.setAttribute('fill',Math.random()<.5?'#9ccc65':'#c5e1a5'); box.appendChild(c);
+    puffs.push({el:c,x:200+(Math.random()-.5)*10,y:462,vx:(Math.random()-.5)*(big?6:2.2),vy:.4+Math.random()*(big?2.5:1.2),r:3+Math.random()*(big?6:3),gr:(big?.6:.35)+Math.random()*.3,life:1,dl:.012+Math.random()*.01}); }
   const tx=document.createElementNS(NS,'text'); tx.textContent=FART_WORDS[Math.floor(Math.random()*FART_WORDS.length)];
   tx.setAttribute('text-anchor','middle'); tx.setAttribute('font-family',"Impact,'Arial Black',sans-serif"); tx.setAttribute('font-size','24');
   tx.setAttribute('fill','#c5e1a5'); tx.setAttribute('stroke','#33691e'); tx.setAttribute('stroke-width','4'); tx.setAttribute('paint-order','stroke');
@@ -467,7 +467,7 @@ const MATCH_REST={x:470,y:60,r:35}, MATCH_LIT={x:212,y:232,r:20};
 async function start(){
   getAC();
   if(state==='running'){ remaining=Math.max(0,endTime-Date.now()); state='paused'; stopHiss(); stopScream(); $('#btnStart').textContent='▶ Continuar'; return; }
-  if(state==='paused'){ endTime=Date.now()+remaining; state='running'; startHiss(); if(panic) startScream(); scheduleFart(1200,3500); $('#btnStart').textContent='⏸ Pausar'; return; }
+  if(state==='paused'){ endTime=Date.now()+remaining; state='running'; startHiss(); if(panic) startScream(); scheduleFart(600,1500); $('#btnStart').textContent='⏸ Pausar'; return; }
   if(state==='done') reset();   // depois do KABUM: limpa e acende de novo
   if(state!=='idle') return;
   total=inputMs(); if(total<=0) return;
@@ -476,7 +476,7 @@ async function start(){
   strikeSound(); $('#matchFlame').style.display='';
   await tween(MATCH_REST,MATCH_LIT,700); if(tok!==runToken) return;
   await wait(250); if(tok!==runToken) return;
-  spark.style.display=''; endTime=Date.now()+total; state='running'; startHiss(); keepAwake(); scheduleFart(1500,3500);
+  spark.style.display=''; endTime=Date.now()+total; state='running'; startHiss(); keepAwake(); scheduleFart(700,1800);
   await tween(MATCH_LIT,MATCH_REST,700); $('#matchFlame').style.display='none';
 }
 function reset(){
@@ -556,7 +556,7 @@ function explode(){
   $('#eyesOpen').style.display='none'; $('#eyesX').style.display='';
   $('#mouth').setAttribute('d','M180 236 Q190 228 200 236 Q210 244 220 236');
   $('#btnStart').textContent='🔥 De novo'; display.textContent='00:00'; $('#lcdText').textContent='00:00'; document.title='💩 KABUM!';
-  fartBoom(); releaseWake(); splatChar();
+  fartBoom(); smallFart({dur:1.6,f0:95,vol:1.6}); puff(true); releaseWake(); splatChar();
   if(navigator.vibrate) navigator.vibrate([400,100,250,80,150]);
   const pt=svg.createSVGPoint(); pt.x=200; pt.y=452; const s=pt.matrixTransform(svg.getScreenCTM());
   const N=MOBILE?160:260, NE=MOBILE?12:20;
@@ -597,7 +597,7 @@ function loop(){
     const prog=1-remaining/total, p=setBurn(prog*L);
     setPanic(remaining<=Math.min(5000,total*.4));
     // pum de vez em quando (no pânico ele só grita)
-    if(!panic && remaining>1500 && Date.now()>=nextFart){ fart(); scheduleFart(3000,7500); }
+    if(!panic && remaining>1500 && Date.now()>=nextFart){ fart(); scheduleFart(1400,3600); }
     if(panic) $('#yellText').textContent='A'.repeat(3+Math.floor(Date.now()/160)%5)+'H!';
     emit(p.x,p.y); setMood(prog); showTime(remaining);
     $('#sparkStar').setAttribute('transform',`rotate(${Date.now()/4%360}) scale(${.8+Math.random()*.5})`);
